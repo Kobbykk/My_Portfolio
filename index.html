@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Edwin Addai Portfolio</title>
+<meta name="description" content="Edwin Addai, data engineer: batch ELT, AWS lakehouse, and Kafka streaming pipelines.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one narrow reading column; the hero is a three-lane pipeline map of the real projects, each lane linking to its write-up. */
+:root {
+  --bg: #eef1f4;
+  --surface: #ffffff;
+  --ink: #14202b;
+  --muted: #55636f;
+  --line: #cfd7df;
+  --accent: #2547c9;
+  --accent-soft: #e2e8fb;
+  --ochre: #a86a0c;
+  --ochre-soft: #f6ead4;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d141b; --surface: #15202a; --ink: #e3e9ef; --muted: #96a4b1; --line: #2a3846;
+    --accent: #8ea6ff; --accent-soft: #1d2a4d; --ochre: #e6ae55; --ochre-soft: #33280f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d141b; --surface: #15202a; --ink: #e3e9ef; --muted: #96a4b1; --line: #2a3846;
+  --accent: #8ea6ff; --accent-soft: #1d2a4d; --ochre: #e6ae55; --ochre-soft: #33280f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 400 16px/1.6 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 1040px; margin: 0 auto; }
+.read { max-width: 68ch; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+.eyebrow { font: 500 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0; }
+.mono { font-family: var(--mono); }
+
+/* top bar */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 0 max(16px, env(safe-area-inset-left, 0px)); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; flex-wrap: wrap; }
+.mark { font: 700 17px/1 var(--display); color: var(--ink); text-decoration: none; }
+.top nav { display: flex; gap: 18px; flex-wrap: wrap; }
+.top nav a { font: 500 13px/1 var(--mono); color: var(--muted); text-decoration: none; }
+.top nav a:hover { color: var(--accent); }
+
+/* hero */
+.hero { padding-block: 56px 28px; display: grid; gap: 20px; }
+.hero h1 { font-size: clamp(40px, 7vw, 76px); font-weight: 800; line-height: 0.98; }
+.hero .role { font: 500 clamp(18px, 2.4vw, 23px)/1.35 var(--display); color: var(--muted); max-width: 40ch; }
+.hero .role b { color: var(--ink); font-weight: 700; }
+.hero p.lede { margin: 0; font-size: 17px; }
+.cta { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 6px; font: 500 14px/1 var(--body); text-decoration: none; border: 1px solid var(--line); color: var(--ink); background: var(--surface); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.btn:hover { border-color: var(--accent); }
+
+/* pipeline map */
+.map { margin-block: 12px 8px; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 18px; display: grid; gap: 4px; }
+.map-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; padding-bottom: 8px; }
+.lane { display: grid; grid-template-columns: 170px 1fr; gap: 16px; align-items: center; padding: 14px 10px; border-radius: 8px; text-decoration: none; color: inherit; border-top: 1px dashed var(--line); transition: background .15s; }
+.lane:hover { background: var(--accent-soft); }
+.lane-name { display: grid; gap: 2px; }
+.lane-name strong { font: 700 16px/1.2 var(--display); }
+.lane-name span { font: 400 12px/1.3 var(--mono); color: var(--muted); }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
+.node { font: 500 12.5px/1.25 var(--mono); padding: 7px 10px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); white-space: nowrap; }
+.node.key { border-color: var(--accent); color: var(--accent); }
+.node.qa { border-color: var(--ochre); color: var(--ochre); background: var(--ochre-soft); }
+.arrow { color: var(--muted); font: 400 14px/1 var(--mono); }
+.extends { font: 400 12px/1.4 var(--mono); color: var(--muted); padding-left: 10px; }
+
+/* sections */
+section { padding-block: 56px; border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 6px; margin-bottom: 28px; }
+.sec-head h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 700; }
+
+/* projects */
+.project { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 32px; padding-block: 28px; }
+.project + .project { border-top: 1px dashed var(--line); }
+.project h3 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 16px; padding: 0; list-style: none; }
+.stack li { font: 500 12px/1 var(--mono); padding: 6px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+.project ul.points { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+.project .repo { font: 500 13px/1.4 var(--mono); }
+.stats { display: grid; gap: 14px; align-content: start; margin: 0; }
+.stat { border-left: 2px solid var(--accent); padding-left: 12px; }
+.stat dt { font: 800 30px/1.05 var(--display); font-variant-numeric: tabular-nums; }
+.stat dd { margin: 4px 0 0; font-size: 13.5px; color: var(--muted); line-height: 1.4; }
+.callout { margin-top: 18px; border: 1px solid var(--ochre); background: var(--ochre-soft); border-radius: 8px; padding: 14px 16px; }
+.callout .eyebrow { color: var(--ochre); margin-bottom: 4px; }
+.callout p { margin: 0; }
+
+/* experience */
+.job { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 24px; padding-block: 20px; }
+.job + .job { border-top: 1px dashed var(--line); }
+.when { font: 500 13px/1.5 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.job h3 { font-size: 21px; font-weight: 700; }
+.job .org { color: var(--muted); margin: 2px 0 10px; }
+.job ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+
+/* skills */
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; }
+.skills h3 { font: 500 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+.skills p { margin: 0; }
+
+/* education */
+.edu { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.edu > div { display: grid; gap: 4px; align-content: start; }
+.edu h3 { font-size: 19px; font-weight: 700; }
+.edu .meta { font: 400 13px/1.5 var(--mono); color: var(--muted); }
+.badge { justify-self: start; font: 500 11px/1 var(--mono); padding: 5px 7px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* contact */
+.contact-list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.contact-list li { display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding-block: 14px; border-bottom: 1px solid var(--line); }
+.contact-list .k { font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.contact-list .v { font: 500 17px/1.3 var(--body); overflow-wrap: anywhere; user-select: all; }
+.copy { font: 500 12px/1 var(--mono); padding: 7px 10px; border-radius: 5px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.copy:hover { border-color: var(--accent); color: var(--accent); }
+footer { padding-block: 28px 40px; color: var(--muted); font: 400 13px/1.5 var(--mono); }
+
+@media (max-width: 760px) {
+  .lane { grid-template-columns: 1fr; gap: 10px; }
+  .project, .job { grid-template-columns: 1fr; gap: 16px; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .skills, .edu { grid-template-columns: 1fr; }
+  .contact-list li { grid-template-columns: 1fr auto; }
+  .contact-list .k { grid-column: 1 / -1; }
+  .top nav { gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">Edwin Addai</a>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+  <div class="hero">
+    <p class="eyebrow">Data engineer · Westerville, Ohio</p>
+    <h1>Edwin Addai</h1>
+    <p class="role"><b>I build data pipelines</b>: batch ELT into a tested star schema, a cloud lakehouse on AWS, and real-time streaming with change data capture.</p>
+    <p class="lede read">I bring 6+ years in enterprise IT to data engineering. My habit from support work carries over: monitor the system, trace a defect to its root cause, and fix it for good. I'm finishing a B.S. in Information Technology at Franklin University, expected December 2027.</p>
+    <div class="cta">
+      <a class="btn primary" href="#projects">See the projects</a>
+      <a class="btn" href="https://github.com/Kobbykk" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://www.linkedin.com/in/edwin-addai-k7349" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+
+  <div class="map" aria-label="Pipeline map of the three projects">
+    <div class="map-head">
+      <p class="eyebrow">Pipeline map</p>
+      <p class="eyebrow">Select a lane to read the project</p>
+    </div>
+    <a class="lane" href="#batch">
+      <span class="lane-name"><strong>Batch ELT</strong><span>weather-rides-pipeline</span></span>
+      <span class="flow">
+        <span class="node">NYC taxi trips + daily weather</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node key">Airflow · parallel ingest</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node">PostgreSQL · chunked COPY</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node key">dbt star schema</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node qa">20 tests gate the mart</span>
+      </span>
+    </a>
+    <p class="extends">↳ the lakehouse extends this pipeline</p>
+    <a class="lane" href="#lakehouse">
+      <span class="lane-name"><strong>Cloud lakehouse</strong><span>AWS · Terraform</span></span>
+      <span class="flow">
+        <span class="node">Parquet · Hive partitions</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node key">S3 data lake · encrypted</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node">Glue Data Catalog · schema as code</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node key">Athena workgroup</span>
+      </span>
+    </a>
+    <a class="lane" href="#streaming">
+      <span class="lane-name"><strong>Streaming + CDC</strong><span>rides-streaming</span></span>
+      <span class="flow">
+        <span class="node">Producer</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node key">Kafka (Redpanda)</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node">Consumer · commit after write</span><span class="arrow" aria-hidden="true">→</span>
+        <span class="node qa">Idempotent sink · event UUID</span>
+        <span class="node">Debezium CDC · logical replication</span>
+      </span>
+    </a>
+  </div>
+
+  <section id="projects" aria-labelledby="projects-h">
+    <div class="sec-head">
+      <p class="eyebrow">Data engineering projects</p>
+      <h2 id="projects-h">Three pipelines, built end to end</h2>
+    </div>
+
+    <article class="project" id="batch">
+      <div>
+        <p class="eyebrow">Batch ELT warehouse</p>
+        <h3>NYC Rides &amp; Weather Pipeline</h3>
+        <a class="repo" href="https://github.com/Kobbykk/weather-rides-pipeline" target="_blank" rel="noopener">github.com/Kobbykk/weather-rides-pipeline</a>
+        <ul class="stack" aria-label="Tools">
+          <li>SQL</li><li>Python</li><li>PostgreSQL</li><li>dbt</li><li>Apache Airflow</li><li>Docker</li>
+        </ul>
+        <ul class="points">
+          <li>Built an automated ELT pipeline over 12.7M NYC taxi trip records ($349.7M in fares) joined to daily weather data. Apache Airflow runs parallel ingestion tasks gated on a dbt build.</li>
+          <li>Designed a dimensional star-schema warehouse in dbt, with 20 data quality tests gating the reporting mart.</li>
+          <li>Cut per-month load time from 2.5 minutes to 48 seconds by replacing row-by-row pandas inserts with chunked PostgreSQL COPY streams.</li>
+        </ul>
+        <div class="callout">
+          <p class="eyebrow">A data quality call</p>
+          <p>Two tests failed. I traced both to root cause and found an undocumented payment code covering 4% of trips. I kept it in the model instead of dropping roughly 500,000 records.</p>
+        </div>
+      </div>
+      <dl class="stats">
+        <div class="stat"><dt>12.7M</dt><dd>taxi trip records modeled</dd></div>
+        <div class="stat"><dt>20</dt><dd>dbt data quality tests</dd></div>
+        <div class="stat"><dt>~3x</dt><dd>faster monthly loads (2.5 min to 48 s)</dd></div>
+      </dl>
+    </article>
+
+    <article class="project" id="lakehouse">
+      <div>
+        <p class="eyebrow">Cloud lakehouse · extends the batch pipeline</p>
+        <h3>Cloud Lakehouse on AWS</h3>
+        <a class="repo" href="https://github.com/Kobbykk/weather-rides-pipeline" target="_blank" rel="noopener">github.com/Kobbykk/weather-rides-pipeline</a>
+        <ul class="stack" aria-label="Tools">
+          <li>AWS S3</li><li>Glue Data Catalog</li><li>Athena</li><li>IAM</li><li>Terraform</li><li>GitHub Actions</li><li>Parquet</li>
+        </ul>
+        <ul class="points">
+          <li>Provisioned an encrypted S3 data lake, Glue Data Catalog, and Athena workgroup in Terraform, declaring table schemas as code instead of relying on a crawler.</li>
+          <li>Deploys through GitHub Actions CI/CD.</li>
+          <li>Reduced data scanned per query 56x: 4.3x from Hive partition pruning and 13x from the Parquet columnar layout. Less data scanned means lower cost per Athena query.</li>
+        </ul>
+      </div>
+      <dl class="stats">
+        <div class="stat"><dt>56x</dt><dd>less data scanned per query</dd></div>
+        <div class="stat"><dt>4.3x</dt><dd>from Hive partition pruning</dd></div>
+        <div class="stat"><dt>13x</dt><dd>from Parquet columnar layout</dd></div>
+      </dl>
+    </article>
+
+    <article class="project" id="streaming">
+      <div>
+        <p class="eyebrow">Real-time streaming</p>
+        <h3>Streaming Pipeline with Change Data Capture</h3>
+        <a class="repo" href="https://github.com/Kobbykk/rides-streaming" target="_blank" rel="noopener">github.com/Kobbykk/rides-streaming</a>
+        <ul class="stack" aria-label="Tools">
+          <li>Apache Kafka (Redpanda)</li><li>Debezium</li><li>PostgreSQL</li><li>Python</li><li>Docker</li>
+        </ul>
+        <ul class="points">
+          <li>Built a Kafka producer and consumer sustaining about 2,200 events per second. The consumer commits offsets only after a durable write, which guarantees at-least-once delivery.</li>
+          <li>Got exactly-once results with an idempotent sink keyed on event UUID. Replaying 8,958 events wrote zero duplicate rows.</li>
+          <li>Configured Debezium change data capture over PostgreSQL logical replication, which captures deletes that timestamp-based polling misses.</li>
+        </ul>
+      </div>
+      <dl class="stats">
+        <div class="stat"><dt>~2,200</dt><dd>events per second sustained</dd></div>
+        <div class="stat"><dt>8,958</dt><dd>events replayed in the test</dd></div>
+        <div class="stat"><dt>0</dt><dd>duplicate rows written</dd></div>
+      </dl>
+    </article>
+  </section>
+
+  <section id="experience" aria-labelledby="experience-h">
+    <div class="sec-head">
+      <p class="eyebrow">Professional experience · 6+ years</p>
+      <h2 id="experience-h">Enterprise IT, where I learned to find root causes</h2>
+    </div>
+    <div class="job">
+      <p class="when">Jun 2022 – Present</p>
+      <div>
+        <h3>Desktop Technician II</h3>
+        <p class="org">Ovation Workplace (SBD) · Dublin, OH</p>
+        <ul>
+          <li>Automate repetitive deployment work with Python and PowerShell, including scripted driver installation that removed manual configuration steps from every rollout.</li>
+          <li>Resolve Level 1 and 2 incidents against defined SLAs across Windows, macOS, and Linux, isolating root causes rather than applying repeat workarounds.</li>
+          <li>Manage the full IT asset lifecycle: intake, tagging, SCCM imaging, and deployment.</li>
+          <li>Delivered a 25+ laptop imaging project on time and led a network closet switching and cabling rebuild.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <p class="when">Apr 2020 – Jun 2022</p>
+      <div>
+        <h3>Service Desk Representative</h3>
+        <p class="org">Insight Enterprises · Delaware, OH</p>
+        <ul>
+          <li>Analyzed recurring incident patterns across high ticket volume and escalated findings to management, turning repeat symptoms into long-term fixes.</li>
+          <li>Wrote knowledge base articles and standard operating procedures used to train new help desk agents.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" aria-labelledby="skills-h">
+    <div class="sec-head">
+      <p class="eyebrow">Technical skills</p>
+      <h2 id="skills-h">Tools I've used in the work above</h2>
+    </div>
+    <div class="skills">
+      <div><h3>Languages &amp; querying</h3><p>Python (pandas, PyArrow, psycopg2), SQL, PowerShell, Bash</p></div>
+      <div><h3>Data engineering</h3><p>ETL/ELT pipelines, data warehousing, dimensional modeling (star schema), Apache Airflow, dbt, Apache Kafka, Debezium (CDC), batch and streaming processing, REST APIs, data quality testing</p></div>
+      <div><h3>Cloud &amp; infrastructure</h3><p>AWS (S3, Glue, Glue Data Catalog, Athena, IAM), Terraform, infrastructure as code, Docker, Docker Compose, Linux, Windows Server</p></div>
+      <div><h3>Databases &amp; storage</h3><p>PostgreSQL, logical replication, Apache Parquet, Hive partitioning, data lake / lakehouse, query optimization, performance tuning</p></div>
+      <div><h3>Systems &amp; IT operations</h3><p>Windows, macOS, and Linux endpoints, SCCM imaging, Microsoft Intune, Active Directory and Microsoft 365 troubleshooting, IT asset lifecycle, incident management, root cause analysis, SLAs, network switching and cabling</p></div>
+      <div><h3>Practices &amp; tooling</h3><p>Git, GitHub Actions (CI/CD), ServiceNow, Jira, knowledge base articles, standard operating procedures</p></div>
+    </div>
+  </section>
+
+  <section id="education" aria-labelledby="education-h">
+    <div class="sec-head">
+      <p class="eyebrow">Education &amp; certifications</p>
+      <h2 id="education-h">Graduating December 2027</h2>
+    </div>
+    <div class="edu">
+      <div>
+        <span class="badge">In progress</span>
+        <h3>Franklin University</h3>
+        <p>B.S. Information Technology</p>
+        <p class="meta">GPA 3.667 · Expected Dec 2027</p>
+      </div>
+      <div>
+        <span class="badge">Completed</span>
+        <h3>Columbus State Community College</h3>
+        <p>A.S. Computer Science</p>
+        <p class="meta">GPA 3.6 · Dec 2023</p>
+      </div>
+      <div>
+        <span class="badge">Certifications</span>
+        <h3>CompTIA</h3>
+        <p>A+ (expired)<br>Network+ (expired)</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" aria-labelledby="contact-h">
+    <div class="sec-head">
+      <p class="eyebrow">Contact</p>
+      <h2 id="contact-h">Open to data engineering roles and internships</h2>
+      <p class="read" style="margin:6px 0 0;color:var(--muted)">Based in Westerville, Ohio. Email is the fastest way to reach me.</p>
+    </div>
+    <ul class="contact-list">
+      <li><span class="k">Email</span><span class="v" id="c-email">edwinaddai.ea@gmail.com</span><button class="copy" type="button" data-copy="c-email">Copy</button></li>
+      <li><span class="k">Phone</span><span class="v" id="c-phone">(614) 649-3846</span><button class="copy" type="button" data-copy="c-phone">Copy</button></li>
+      <li><span class="k">LinkedIn</span><a class="v" href="https://www.linkedin.com/in/edwin-addai-k7349" target="_blank" rel="noopener">linkedin.com/in/edwin-addai-k7349</a><span></span></li>
+      <li><span class="k">GitHub</span><a class="v" href="https://github.com/Kobbykk" target="_blank" rel="noopener">github.com/Kobbykk</a><span></span></li>
+    </ul>
+  </section>
+
+  <footer>Edwin Addai · Data engineer · Westerville, Ohio</footer>
+</main>
+
+<script>
+document.querySelectorAll('.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var el = document.getElementById(btn.dataset.copy);
+    var text = el.textContent.trim();
+    var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); };
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Selected';
+      setTimeout(function () { btn.textContent = 'Copy'; }, 1600);
+    };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+});
+</script>
+</body>
+</html>
